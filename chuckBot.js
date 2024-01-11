@@ -6,10 +6,6 @@ import Utils from './utils.js';
 import * as strings from './strings.js';
 
 class ChuckBot {
-
-    // URL for Chuck Norris jokes page
-    static JOKES_URL = 'https://parade.com/968666/parade/chuck-norris-jokes/';
-
     /**
      * Constructor for ChuckBot class.
      * @param {string} botToken - The token for the Telegram bot.
@@ -17,7 +13,7 @@ class ChuckBot {
     constructor(botToken) {
         this.bot = new Telegraf(botToken);
         this.translator = new Translator();
-        this.jokeService = new JokeService(ChuckBot.JOKES_URL);  
+        this.jokeService = new JokeService(process.env.JOKE_SERVICE_URL);  
 
         // Initialize target language code to default - English
         this.targetLanguageCode = 'en';
@@ -37,7 +33,7 @@ class ChuckBot {
      * @param {Object} ctx - The Telegraf context object.
      */
     handleTextMessage(ctx) {
-        
+
         const messageText = ctx.message.text;
 
         // If the message is of type "set language x"
