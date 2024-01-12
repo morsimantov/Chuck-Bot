@@ -4,6 +4,7 @@ import Translator from './translator.js';
 import JokeService from './jokeService.js';
 import Utils from './utils.js';
 import * as strings from '../strings.js';
+import LocalSession from 'telegraf-session-local';
 
 class ChuckBot {
     /**
@@ -17,6 +18,15 @@ class ChuckBot {
 
         // Initialize target language code to default - English
         this.targetLanguageCode = 'en';
+
+        // Set up a local session middleware for each handler
+        const localSession = new LocalSession({
+            database: 'user_preferences.json',
+            getSessionKey: (ctx) => ctx.from.id,
+        });
+
+        // Enable local session middleware
+        this.bot.use(localSession.middleware());
     }
 
     /**
@@ -36,9 +46,14 @@ class ChuckBot {
 
         const messageText = ctx.message.text;
 
+        // Retrieve the user's language preference from the session
+        const userLanguageCode = ctx.session.language || 'en';
+        this.targetLanguageCode = userLanguageCode;
+
         // If the message is the "start" command
         if (messageText.toLowerCase() === '/start') {
             this.targetLanguageCode = 'en';
+            ctx.session.language = this.targetLanguageCode;
             ctx.reply(strings.START_COMMAND_MESSAGE);
             return;
         }
@@ -74,6 +89,9 @@ class ChuckBot {
 
         // If the language name provided is valid, set the target language code accordingly
         if (userLanguageCode) {
+            // Set the user's language preference in the session
+            ctx.session.language = userLanguageCode;
+            // Update the target language code directly
             this.targetLanguageCode = userLanguageCode;
             this.replyInTargetLanguage(ctx, strings.SET_LANGUAGE_RESPONSE);
         } else {
