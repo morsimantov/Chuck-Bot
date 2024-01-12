@@ -13,7 +13,7 @@ class ChuckBot {
     constructor(botToken) {
         this.bot = new Telegraf(botToken);
         this.translator = new Translator();
-        this.jokeService = new JokeService(process.env.JOKE_SERVICE_URL);  
+        this.jokeService = new JokeService(process.env.JOKE_SERVICE_URL);
 
         // Initialize target language code to default - English
         this.targetLanguageCode = 'en';
@@ -36,11 +36,18 @@ class ChuckBot {
 
         const messageText = ctx.message.text;
 
+        // If the message is the "start" command
+        if (messageText.toLowerCase() === '/start') {
+            this.targetLanguageCode = 'en';
+            ctx.reply(strings.START_COMMAND_MESSAGE);
+            return;
+        }
+
         // If the message is of type "set language x"
         if (messageText.toLowerCase().includes(strings.SET_LANGUAGE_STRING)) {
             this.setLanguage(ctx, messageText);
 
-        // If the message is numeric - a joke number   
+            // If the message is numeric - a joke number   
         } else if (!isNaN(messageText)) {
             const userInput = parseInt(messageText);
 
@@ -51,7 +58,7 @@ class ChuckBot {
                 this.replyInTargetLanguage(ctx, strings.INVALID_NUMBER_RESPONSE);
             }
 
-        // If the request is neither a number nor a set language command
+            // If the request is neither a number nor a set language command
         } else {
             this.replyInTargetLanguage(ctx, strings.INVALID_REQUEST_RESPONSE);
         }
@@ -67,7 +74,7 @@ class ChuckBot {
         const msgWords = messageText.split(' ');
         // Extract the last word, which is supposed to be the language name
         const languageName = msgWords[msgWords.length - 1];
-        
+
         // Extract the language code from the language name
         const userLanguageCode = Utils.extractLanguageCode(languageName);
 

@@ -1,3 +1,4 @@
+export const START_COMMAND_MESSAGE = 'Welcome to Chuck Bot!';
 
 export const SET_LANGUAGE_STRING = 'set language';
 
