@@ -49,14 +49,8 @@ class ChuckBot {
 
             // If the message is numeric - a joke number   
         } else if (!isNaN(messageText)) {
-            const userInput = parseInt(messageText);
-
-            // If the joke's number is valid, i.e. between 1 and 101
-            if (userInput >= 1 && userInput <= 101) {
-                this.handleJokeRequest(ctx, userInput);
-            } else {
-                this.replyInTargetLanguage(ctx, strings.INVALID_NUMBER_RESPONSE);
-            }
+            const userInputNumber = parseInt(messageText);
+            this.handleJokeRequest(ctx, userInputNumber);
 
             // If the request is neither a number nor a set language command
         } else {
@@ -93,6 +87,11 @@ class ChuckBot {
      * @param {number} userInputNumber - The user input representing the joke number.
      */
     async handleJokeRequest(ctx, userInputNumber) {
+        // If the joke's number is not valid, i.e. not between 1 and 101
+        if (userInputNumber < 1 || userInputNumber > 101) {
+            this.replyInTargetLanguage(ctx, strings.INVALID_NUMBER_RESPONSE);
+            return;
+        }
         try {
             // Get the requested joke based on the user input number
             const selectedJoke = this.jokeService.getJoke(userInputNumber - 1);
