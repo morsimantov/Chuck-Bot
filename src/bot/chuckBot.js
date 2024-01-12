@@ -115,8 +115,7 @@ class ChuckBot {
             const selectedJoke = this.jokeService.getJoke(userInputNumber - 1);
 
             // Translate the joke to the target language and send it to the user
-            const translatedJoke = await this.translator.translate(selectedJoke, this.targetLanguageCode);
-            ctx.reply(translatedJoke);
+            this.replyInTargetLanguage(ctx, selectedJoke);
         } catch (error) {
             console.error('Error handling joke request:', error.message);
             ctx.replyInTargetLanguage(strings.ERROR_JOKE_REQUEST);
