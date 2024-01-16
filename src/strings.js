@@ -1,4 +1,4 @@
-export const START_COMMAND_MESSAGE = 'Welcome to Chuck Bot!\n Set language to your choice or enter a number between 1-101 to get a Chuck Norris joke.';
+export const START_COMMAND_MESSAGE = 'Welcome to Chuck Bot!\nSet language to your choice or enter a number between 1-101 to get a Chuck Norris joke.';
 
 export const SET_LANGUAGE_STRING = 'set language';
 
