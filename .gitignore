@@ -10,3 +10,7 @@
 /build
 
 # misc
+.env
+
+# Ignore user preferences
+/user_preferences.json
