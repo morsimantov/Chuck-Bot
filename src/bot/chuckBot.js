@@ -17,9 +17,9 @@ class ChuckBot {
         this.jokeService = new JokeService(process.env.JOKE_SERVICE_URL);
 
         // Initialize target language code to default - English
-        this.targetLanguageCode = 'en';
+        this.targetLanguageCode = DEFAULT_LANGUAGE_CODE;
 
-        // Set up a local session middleware for each handler
+        // Set up a local session middleware for user prefrences
         const localSession = new LocalSession({
             database: 'user_preferences.json',
             getSessionKey: (ctx) => ctx.from.id,
@@ -47,12 +47,13 @@ class ChuckBot {
         const messageText = ctx.message.text;
 
         // Retrieve the user's language preference from the session
-        const userLanguageCode = ctx.session.language || 'en';
+        const userLanguageCode = ctx.session.language || DEFAULT_LANGUAGE_CODE;
         this.targetLanguageCode = userLanguageCode;
 
         // If the message is the "start" command
         if (messageText.toLowerCase() === '/start') {
-            this.targetLanguageCode = 'en';
+            // Set the language code to default - English
+            this.targetLanguageCode = DEFAULT_LANGUAGE_CODE;
             ctx.session.language = this.targetLanguageCode;
             ctx.reply(strings.START_COMMAND_MESSAGE);
             return;
@@ -62,12 +63,12 @@ class ChuckBot {
         if (messageText.toLowerCase().includes(strings.SET_LANGUAGE_STRING)) {
             this.setLanguage(ctx, messageText);
 
-            // If the message is numeric - a joke number   
+          // If the message is numeric - a joke number   
         } else if (!isNaN(messageText)) {
             const userInputNumber = parseInt(messageText);
             this.handleJokeRequest(ctx, userInputNumber);
 
-            // If the request is neither a number nor a set language command
+         // If the request is neither a number nor a set language command
         } else {
             this.replyInTargetLanguage(ctx, strings.INVALID_REQUEST_RESPONSE);
         }
@@ -80,9 +81,9 @@ class ChuckBot {
      */
     setLanguage(ctx, messageText) {
         // Split the text into words by spaces
-        const msgWords = messageText.split(' ');
+        const messageWords = messageText.split(' ');
         // Extract the last word, which is supposed to be the language name
-        const languageName = msgWords[msgWords.length - 1];
+        const languageName = messageWords[messageWords.length - 1];
 
         // Extract the language code from the language name
         const userLanguageCode = Utils.extractLanguageCode(languageName);
