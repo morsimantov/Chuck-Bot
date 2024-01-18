@@ -11,6 +11,7 @@
 **This is a telegram bot in tribute to Chuck Norris. The bot tells 101 different Chuck Norris jokes in any language you choose.**
 
 In this project I used [Telegraf](https://github.com/telegraf/telegraf/ "Telegraf") library, a Telegrem bot development library for Node.js.</br>
+
 For web scraping I used [Axios](https://github.com/axios/axios "Axios") and [Cheerio](https://github.com/cheeriojs/cheerio/ "Cheerio") libraries.</br>
 I also used Azure Translation API, and deployed the bot in AWS cloud platform (using an EC2 Instance).
 
